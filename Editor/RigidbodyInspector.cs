@@ -146,8 +146,8 @@ namespace Es.Unity.Addins.CustomInspectors
 
         private static float ViewWidth => EditorGUIUtility.currentViewWidth - 20;
 
-        private static bool _Foldout_Translation = true;
-        private static bool _Foldout_Rotation = true;
+        private static bool _Foldout_Translation = false;
+        private static bool _Foldout_Rotation = false;
 
         private static (Vector3 Velocity, float Drag) DrawVelocityAndDrag(GUIContent content, Vector3 velocity, float drag) {
             (Vector3, float) @return = (velocity, drag);
@@ -226,8 +226,14 @@ namespace Es.Unity.Addins.CustomInspectors
                 using(new EditorGUI.IndentLevelScope()) {
 #if true
                     using(new EditorGUI.DisabledScope(This.isKinematic)) {
-                        Vector3 lv = EditorGUILayout.Vector3Field(new GUIContent("Linear Velocity"), This.velocity);
-                        if(!This.isKinematic) This.velocity = lv;
+                        Vector3 lv = This.velocity;
+                        using(var check = new EditorGUI.ChangeCheckScope()) {
+                            lv.x = (float)Math.Round(lv.x, 4);
+                            lv.y = (float)Math.Round(lv.y, 4);
+                            lv.z = (float)Math.Round(lv.z, 4);
+                            lv = EditorGUILayout.Vector3Field(new GUIContent("Linear Velocity"), lv);
+                            if(check.changed && !This.isKinematic) This.velocity = lv;
+                        }
                     }
                     This.drag = EditorGUILayout.FloatField(new GUIContent("Linear Drag"), This.drag);
 #else

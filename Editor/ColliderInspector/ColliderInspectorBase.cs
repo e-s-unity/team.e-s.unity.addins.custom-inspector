@@ -128,6 +128,8 @@ namespace Es.Unity.Addins.CustomInspectors
             return tempMask;
         }
 
+        protected private virtual bool DrawsEditButton => true;
+
         public sealed override void OnInspectorGUI() {
 
 
@@ -151,8 +153,10 @@ namespace Es.Unity.Addins.CustomInspectors
             }
             EditorGUILayout.Space();
 
-            DrawColliderEditButton(this);
-            Space();
+            if(DrawsEditButton) {
+                DrawColliderEditButton(this);
+                Space();
+            }
 
             EditorGUILayout.LabelField(new GUIContent("Shape", "The feature of the shape of colldider."));
             using(new EditorGUI.IndentLevelScope()) {

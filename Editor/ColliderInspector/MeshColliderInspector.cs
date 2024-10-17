@@ -17,6 +17,9 @@ namespace Es.Unity.Addins.CustomInspectors
     [UnityEditor.CustomEditor(typeof(UnityEngine.MeshCollider))]
     public class MeshColliderInspector : ColliderInspectorBase<UnityEngine.MeshCollider>
     {
+
+        private protected override bool DrawsEditButton => false;
+
         private protected override void DrawShapeProperties() {
             Target.convex = EditorGUILayout.Toggle(new GUIContent("Convex"), Target.convex);
             Target.sharedMesh = (UnityEngine.Mesh)EditorGUILayout.ObjectField(new GUIContent("Mesh"), Target.sharedMesh, typeof(UnityEngine.Mesh));
