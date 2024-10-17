@@ -1,0 +1,14 @@
+{
+    "name": "Es.Unity.Addins.CustomInspectors",
+    "rootNamespace": "Es.Unity.Addins.CustomInspectors",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
