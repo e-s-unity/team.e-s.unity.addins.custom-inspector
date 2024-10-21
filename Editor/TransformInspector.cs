@@ -32,7 +32,7 @@ namespace Es.Unity.Addins.CustomInspectors
         private Vector3 _Temp_Rotation;
         private Vector3 _Temp____Scale;
 
-        private bool _DrawAsWorld = false;
+        //private bool _DrawAsWorld = false;
 
         
 
@@ -40,8 +40,11 @@ namespace Es.Unity.Addins.CustomInspectors
         private bool HasParent => this.Target.parent != null;
 
         private static void SetScale(Transform transform, Vector3 worldScale) {
-            var gs = transform.lossyScale;
-            transform.localScale = new(worldScale.x / gs.x, worldScale.y / gs.y, worldScale.z / gs.z);
+            var parentWorldScale = Vector3.one;
+            if(transform.parent != null) {
+                parentWorldScale = transform.parent.lossyScale;
+            }
+            transform.localScale = new(worldScale.x / parentWorldScale.x, worldScale.y / parentWorldScale.y, worldScale.z / parentWorldScale.z);
         }
 
         private static readonly GUIContent EmptyContent = new("Å@");
