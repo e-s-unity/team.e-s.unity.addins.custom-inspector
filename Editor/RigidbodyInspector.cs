@@ -168,14 +168,13 @@ namespace Es.Unity.Addins.CustomInspectors
             This.isKinematic = EditorGUILayout.Toggle(_isKinematicContent, This.isKinematic);
 #else
             {
-                float w = EditorGUIUtility.currentViewWidth - 20;
                 Color c = GUI.color;
                 (bool left, bool right) pressed = (false, false);
                 using(new EditorGUILayout.HorizontalScope()) {
                     if(This.isKinematic) GUI.color = Color.gray;
-                    pressed.left = GUILayout.Button(new GUIContent("Physic", "Set to the \"isKinematic\" property as false."), EditorStyles.miniButtonLeft, GUILayout.Width(w / 2));
+                    pressed.left = GUILayout.Button(new GUIContent("Physic", "Set to the \"isKinematic\" property as false."), EditorStyles.miniButtonLeft);
                     GUI.color = !This.isKinematic ? Color.gray : c;
-                    pressed.right = GUILayout.Button(new GUIContent("Kinematic", "Set to the \"isKinematic\" property as true."), EditorStyles.miniButtonRight, GUILayout.Width(w / 2));
+                    pressed.right = GUILayout.Button(new GUIContent("Kinematic", "Set to the \"isKinematic\" property as true."), EditorStyles.miniButtonRight);
                     GUI.color = c;
                 }
                 if(pressed.left) {
@@ -202,7 +201,7 @@ namespace Es.Unity.Addins.CustomInspectors
             This.detectCollisions = EditorGUILayout.Toggle(new GUIContent("Detect Collisions"), This.detectCollisions);
             if(This.detectCollisions) {
                 using(new EditorGUI.IndentLevelScope()) {
-                    This.collisionDetectionMode = (CollisionDetectionMode)EditorGUILayout.EnumPopup(new GUIContent("Detection Mode"), This.collisionDetectionMode);
+                    This.collisionDetectionMode = (CollisionDetectionMode)EditorGUILayout.EnumPopup(new GUIContent("Collision Detection Mode"), This.collisionDetectionMode);
                 }
             }
             EditorGUILayout.Space();
@@ -217,7 +216,7 @@ namespace Es.Unity.Addins.CustomInspectors
             this.Mass = EditorGUILayout.DelayedFloatField(_massContent, this.Mass);
             if(this.Mass > 0) {
                 using(new EditorGUI.IndentLevelScope()) {
-                    This.centerOfMass = EditorGUILayout.Vector3Field(new GUIContent("Centroid Offset", "The center of mass."), This.centerOfMass);
+                    This.centerOfMass = EditorGUILayout.Vector3Field(new GUIContent("Centroid", "The center of mass."), This.centerOfMass);
                 }
             }
 
@@ -226,16 +225,16 @@ namespace Es.Unity.Addins.CustomInspectors
                 using(new EditorGUI.IndentLevelScope()) {
 #if true
                     using(new EditorGUI.DisabledScope(This.isKinematic)) {
-                        Vector3 lv = This.velocity;
+                        Vector3 lv = This.linearVelocity;
                         using(var check = new EditorGUI.ChangeCheckScope()) {
                             lv.x = (float)Math.Round(lv.x, 4);
                             lv.y = (float)Math.Round(lv.y, 4);
                             lv.z = (float)Math.Round(lv.z, 4);
                             lv = EditorGUILayout.Vector3Field(new GUIContent("Linear Velocity"), lv);
-                            if(check.changed && !This.isKinematic) This.velocity = lv;
+                            if(check.changed && !This.isKinematic) This.linearVelocity = lv;
                         }
                     }
-                    This.drag = EditorGUILayout.FloatField(new GUIContent("Linear Drag"), This.drag);
+                    This.linearDamping = EditorGUILayout.FloatField(new GUIContent("Linear Damping"), This.linearDamping);
 #else
                     var linear = DrawVelocityAndDrag(new GUIContent("Linear Velocity"), This.velocity, This.drag);
                     This.velocity = linear.Velocity;
@@ -272,7 +271,7 @@ namespace Es.Unity.Addins.CustomInspectors
                         Vector3 after_av = EditorGUILayout.Vector3Field(new GUIContent("Angular Velocity"), This.angularVelocity);
                         if(!This.isKinematic) This.angularVelocity = after_av;
                     }
-                    This.angularDrag = EditorGUILayout.FloatField(new GUIContent("Angular Drag"), This.angularDrag);
+                    This.angularDamping = EditorGUILayout.FloatField(new GUIContent("Angular Damping"), This.angularDamping);
 
                     // Constraint (Translate)
                     RigidbodyConstraintsSetting temp_rot = new(This.constraints);

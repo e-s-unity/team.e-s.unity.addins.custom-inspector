@@ -201,7 +201,7 @@ namespace Es.Unity.Addins.CustomInspectors
                     }
                 }
                 else {
-                    EditorGUILayout.LabelField(new GUIContent(label, $"The {tipName} in both of world or local space."), EditorStyles.boldLabel, GUILayout.Width(EditorGUIUtility.labelWidth));
+                    EditorGUILayout.LabelField(new GUIContent(label, $"The {tipName} in both of world or local space."), EditorStyles.label, GUILayout.Width(EditorGUIUtility.labelWidth));
                 }
                 if(drawAsWorld) {
                     hasAnyChange |= worldFieldDrawer();

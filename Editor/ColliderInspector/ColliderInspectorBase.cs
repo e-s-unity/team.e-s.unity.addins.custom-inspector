@@ -8,7 +8,6 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEditor;
-using static Codice.Client.Common.EventTracking.TrackFeatureUseEvent.Features.DesktopGUI.Filters;
 using UnityEditorInternal;
 
 namespace Es.Unity.Addins.CustomInspectors
@@ -36,21 +35,15 @@ namespace Es.Unity.Addins.CustomInspectors
 
         private static bool _IsExpanded_AdvancedSettings = false;
 
-        private static UnityEngine.PhysicMaterial DefaultPhysicMaterial => new(){
+        private static PhysicsMaterial DefaultPhysicMaterial => new(){
             staticFriction  = 0.6f,
             dynamicFriction = 0.6f,
             bounciness = 0,
-            frictionCombine = PhysicMaterialCombine.Average,
-            bounceCombine = PhysicMaterialCombine.Average,
+            frictionCombine = PhysicsMaterialCombine.Average,
+            bounceCombine = PhysicsMaterialCombine.Average,
         };
 
         private static void DrawCommonProperties(Collider target) {
-
-#if false
-            /* Collider Settings */
-            target.isTrigger = EditorGUILayout.Toggle(new GUIContent("Is Trigger", "Set whether the collider provides collisions."), target.isTrigger);
-            Space();
-#endif
 
             /* Advanced Settings */
             _IsExpanded_AdvancedSettings = EditorGUILayout.Foldout(_IsExpanded_AdvancedSettings, new GUIContent("Advanced"), EditorStyles.foldout);
@@ -60,7 +53,8 @@ namespace Es.Unity.Addins.CustomInspectors
 
                     /* Material Profiles */
                     Space();
-                    var pmat = target.sharedMaterial = (UnityEngine.PhysicMaterial)EditorGUILayout.ObjectField(new GUIContent("Physic Material", "Set a profile of physic properties, Friction and Bounciness of the rigidbody."), target.sharedMaterial, typeof(UnityEngine.PhysicMaterial));
+                    var pmat = target.sharedMaterial = (PhysicsMaterial)EditorGUILayout.ObjectField(new GUIContent("Physic Material", "Set a profile of physic properties, Friction and Bounciness of the rigidbody."), target.sharedMaterial, typeof(PhysicsMaterial));
+#if false
                     if(pmat == null) pmat = DefaultPhysicMaterial;
                     if(pmat != null) {
                         using(new EditorGUI.IndentLevelScope()) {
@@ -81,6 +75,7 @@ namespace Es.Unity.Addins.CustomInspectors
                             }
                         }
                     }
+#endif
                  
                 }
                 //DrawOpticMaterialProperty(new GUIContent("Optic Material", "Set a profile of optic properties, Refract and Reflect of the ray."), target);
@@ -105,17 +100,12 @@ namespace Es.Unity.Addins.CustomInspectors
                     target.excludeLayers = DrawLayerMaskProperty(new GUIContent("Exclude"), target.excludeLayers);
                 }
 #else
-                EditorGUILayout.LabelField(new GUIContent("Layer"));
+                //target.gameObject.layer = EditorGUILayout.LayerField(new GUIContent("Layer", "The 'INDEX' number of the layer where this object there is in."), target.gameObject.layer);
+                target.layerOverridePriority = EditorGUILayout.DelayedIntField(new GUIContent("Layer Override Priority"), target.layerOverridePriority);
                 using(new EditorGUI.IndentLevelScope()) {
-                    target.gameObject.layer = EditorGUILayout.LayerField(new GUIContent("Self", "The 'INDEX' number of the layer where this object there is in."), target.gameObject.layer);
-                    EditorGUILayout.LabelField(new GUIContent("Override"));
-                    using(new EditorGUI.IndentLevelScope()) {
-                        target.layerOverridePriority = EditorGUILayout.DelayedIntField(new GUIContent("Priority"), target.layerOverridePriority);
-                        target.includeLayers = DrawLayerMaskProperty(new GUIContent("Include"), target.includeLayers);
-                        target.excludeLayers = DrawLayerMaskProperty(new GUIContent("Exclude"), target.excludeLayers);
-                    }
+                    target.includeLayers = DrawLayerMaskProperty(new GUIContent("Include"), target.includeLayers);
+                    target.excludeLayers = DrawLayerMaskProperty(new GUIContent("Exclude"), target.excludeLayers);
                 }
-
 #endif
             }
 
@@ -134,14 +124,13 @@ namespace Es.Unity.Addins.CustomInspectors
 
 
             {
-                float w = EditorGUIUtility.currentViewWidth - 20;
                 Color c = GUI.color;
                 (bool left, bool right) pressed = (false, false);
                 using(new EditorGUILayout.HorizontalScope()) {
                     if(Target.isTrigger) GUI.color = Color.gray;
-                    pressed.left = GUILayout.Button(new GUIContent("Collider", "Set to the \"isTrigger\" property as false."), EditorStyles.miniButtonLeft, GUILayout.Width(w / 2));
+                    pressed.left = GUILayout.Button(new GUIContent("Collider", "Set to the \"isTrigger\" property as false."), EditorStyles.miniButtonLeft);
                     GUI.color = !Target.isTrigger ? Color.gray : c;
-                    pressed.right = GUILayout.Button(new GUIContent("Trigger", "Set to the \"isTrigger\" property as true."), EditorStyles.miniButtonRight, GUILayout.Width(w / 2));
+                    pressed.right = GUILayout.Button(new GUIContent("Trigger", "Set to the \"isTrigger\" property as true."), EditorStyles.miniButtonRight);
                     GUI.color = c;
                 }
                 if(pressed.left) {
@@ -158,10 +147,14 @@ namespace Es.Unity.Addins.CustomInspectors
                 Space();
             }
 
+#if false
             EditorGUILayout.LabelField(new GUIContent("Shape", "The feature of the shape of colldider."));
             using(new EditorGUI.IndentLevelScope()) {
                 this.DrawShapeProperties();
             }
+#else
+            this.DrawShapeProperties();
+#endif
 
             Space();
             DrawCommonProperties(Target);
