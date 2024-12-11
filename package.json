@@ -1,6 +1,6 @@
 {
   "name": "team.e-s.unity.addins.custom-inspector",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "displayName": "Unity Custom Inspector for Primitive Components",
   "description": "Provides customizing inspector's appearance of commonly used components, Transform, Collider(s), and Rigidbody.",
   "unity": "2023.2",
@@ -14,6 +14,6 @@
   "license": "MIT",
   "author": {
     "name": "e/s",
-    "email": "lain_score@outlook.com"
+    "email": "lain@e-s.team"
   }
 }
